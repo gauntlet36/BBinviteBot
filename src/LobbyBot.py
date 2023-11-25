@@ -150,15 +150,10 @@ async def lobbyhelp(ctx):
     after id into https://www.steamidfinder.com/ to find your steam ID.
     Also see Steam FAQ here https://help.steampowered.com/en/faqs/view/2816-BE67-5B69-0FEC
     
+    The commands that you can use are:
     
-    There are 6 commands available
-    
-    **/register *STEAMID*** - replace **_STEAMID_** with your Steam ID, this adds your Steam ID to the database
-    **/unregister** - This will remove your Steam ID from the database
-    **/checkid** - This will make the bot return your currently registered Steam ID
-    **/lobby** - If you\'ve registered your Steam ID and are currently in a joinable lobby. This will post a link
-    **/changeid *STEAMID*** - replace **_STEAMID_** with your Steam ID, this changes your Steam ID in the database
-    **/lobbyhelp** - This brings up this message"""
+    **/register *STEAMID*** - This adds your Steam ID to the database
+    **/lobby** - If you\'ve registered your Steam ID and are currently in a joinable lobby. This will post a link"""
 
     embed = discord.Embed(title="Help", description=helpmessage, color=0xFF5733)
     await ctx.send(embed=embed)
