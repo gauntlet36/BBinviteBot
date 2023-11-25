@@ -153,7 +153,7 @@ async def lobbyhelp(ctx):
     **/checkid** - This will make the bot return your currently registered Steam ID
     **/lobby** - If you\'ve registered your Steam ID and are currently in a joinable lobby. This will post a link
     **/changeid *STEAMID*** - replace **_STEAMID_** with your Steam ID, this changes your Steam ID in the database
-    **/invitehelp** - This brings up this message"""
+    **/lobbyhelp** - This brings up this message"""
 
     embed = discord.Embed(title="Help", description=helpmessage, color=0xFF5733)
     await ctx.send(embed=embed)
