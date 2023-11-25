@@ -1,7 +1,7 @@
 import requests
 
 
-url = "https://discord.com/api/v10/applications/1177179830551322634/commands"
+url = "https://discord.com/api/v10/applications/appid/commands"
 
 # This is an example CHAT_INPUT or Slash Command, with a type of 1
 json = {
@@ -20,7 +20,7 @@ json = {
 
 # For authorization, you can use either your bot token
 headers = {
-    "Authorization": "Bot MTE3NzE3OTgzMDU1MTMyMjYzNA.GAxlzJ.XGIo-eFXP9bO88RQRcLnEgsYk0dsz7aOd6B_MA"
+    "Authorization": "Bot token"
 }
 
 
