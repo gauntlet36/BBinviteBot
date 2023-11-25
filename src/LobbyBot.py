@@ -146,10 +146,11 @@ async def changeid(ctx, arg):
 async def lobbyhelp(ctx):
     helpmessage = """This bot can be used to send invite links automatically
     In order for it to work, you must have your steam profile public and register your steam ID.
-    You can find your steam ID by going to your steam community profile. If you have a custom URL you can enter the name
-    after id into https://www.steamidfinder.com/ to find your steam ID.
-    Also see Steam FAQ here https://help.steampowered.com/en/faqs/view/2816-BE67-5B69-0FEC
     
+    You can find your steam ID by going to your steam community profile.
+    If you have a custom URL you can enter the name after id into https://www.steamidfinder.com/ to find your steam ID.
+    Also see Steam FAQ here https://help.steampowered.com/en/faqs/view/2816-BE67-5B69-0FEC
+
     The commands that you can use are:
     
     **/register *STEAMID*** - This adds your Steam ID to the database
