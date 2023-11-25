@@ -123,6 +123,7 @@ async def unregister(ctx):
     else:
         await ctx.send("Thanks " + str(ctx.message.author.nick) + " " + response)
 
+
 @bot.command(name='checkid', pass_context=True)
 async def checkid(ctx):
     discord_id = str(ctx.message.author.id)
