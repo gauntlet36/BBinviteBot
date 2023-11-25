@@ -144,17 +144,18 @@ async def changeid(ctx, arg):
 
 @bot.command(name='lobbyhelp')
 async def lobbyhelp(ctx):
-    helpmessage = """This bot can be used to send invite links automatically
-    In order for it to work, you must have your steam profile public and register your steam ID.
-    
-    You can find your steam ID by going to your steam community profile.
-    If you have a custom URL you can enter the name after id into https://www.steamidfinder.com/ to find your steam ID.
-    Also see Steam FAQ here https://help.steampowered.com/en/faqs/view/2816-BE67-5B69-0FEC
-
-    The commands that you can use are:
-    
-    **/register *STEAMID*** - This adds your Steam ID to the database
-    **/lobby** - If you\'ve registered your Steam ID and are currently in a joinable lobby. This will post a link"""
+    helpmessage = "I can help you send invite links automatically. In order to work, you must "\
+            "have a public Steam profile and register your Steam ID with me.\n\n"\
+            \
+            "Your 17-digit Steam ID can be found in the URL of your Steam Community Profile. If "\
+            "you have a custom URL, you can enter the name after 'id' into "\
+            "https://www.steamidfinder.com/ to get your actual Steam ID.\n\n"\
+            \
+            "The commands that you can use are:\n\n"\
+            \
+            "**/register *STEAMID*** - This adds your Steam ID to the database\n"\
+            "**/lobby** - If you've registered your Steam ID and are currently in a joinable "\
+                         "lobby, this will post a link"
 
     embed = discord.Embed(title="Help", description=helpmessage, color=0xFF5733)
     await ctx.send(embed=embed)
