@@ -58,7 +58,7 @@ def addrecord(arg1, arg2):
         return "Your Steam ID was added"
     else:
         cur.close()
-        return "Steam ID in database, please use replace command"
+        return ", This Steam ID is already registered, please use /changeid command if you would like to change it"
 
 
 def removerecord(arg):
@@ -118,8 +118,10 @@ async def register(ctx, arg):
 async def unregister(ctx):
     discord_id = str(ctx.message.author.id)
     response = removerecord(discord_id)
-    await ctx.send(response)
-
+    if ctx.message.author.nick is None:
+        await ctx.send("Thanks " + str(ctx.message.author) + " " + response)
+    else:
+        await ctx.send("Thanks " + str(ctx.message.author.nick) + " " + response)
 
 @bot.command(name='checkid', pass_context=True)
 async def checkid(ctx):
@@ -133,7 +135,10 @@ async def changeid(ctx, arg):
     discord_id = str(ctx.message.author.id)
     steam_id = arg
     response = updateid(discord_id, steam_id)
-    await ctx.send(response)
+    if ctx.message.author.nick is None:
+        await ctx.send("Thanks " + str(ctx.message.author) + " " + response)
+    else:
+        await ctx.send("Thanks " + str(ctx.message.author.nick) + " " + response)
 
 
 @bot.command(name='lobbyhelp')
