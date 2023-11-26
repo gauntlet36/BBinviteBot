@@ -84,6 +84,25 @@ def updateid(arg1, arg2):
     return "Your Steam ID has been updated"
 
 
+@bot.event
+async def on_message(message):
+
+    if message.author == bot.user:
+        return
+    steamcheck = message.content
+    if steamcheck.startswith("steam://joinlobby/"):
+        steamsplit = steamcheck.split(" ", maxsplit=1)
+        steamlink = steamsplit[0]
+        if 50 <= len(steamlink) <= 75:
+            ctx = await bot.get_context(message)
+            button1 = discord.ui.Button(style=discord.ButtonStyle.green,
+                                        url="https://gauntlet36.github.io/lobby.html?target=" + steamlink, label="Join")
+            view = discord.ui.View()
+            view.add_item(button1)
+            await ctx.send("Join " + str(ctx.message.author.display_name) + "'s lobby", view=view)
+    await bot.process_commands(message)
+
+
 @bot.command(name='lobby')
 async def lobby(ctx):
     discord_id = str(ctx.message.author.id)
@@ -93,13 +112,7 @@ async def lobby(ctx):
                                 url="https://gauntlet36.github.io/lobby.html?target=" + res, label="Join")
     view = discord.ui.View()
     view.add_item(button1)
-    # embed = discord.Embed(title="Join OJay's Lobby", url="https://gauntlet36.github.io/lobby.html?target=" + res,
-    #                       description="Join OJay's Lobby",
-    #                       color=0xFF5733)
-    if ctx.message.author.nick is None:
-        await ctx.send("Join " + str(ctx.message.author) + "'s lobby", view=view)
-    else:
-        await ctx.send("Join " + str(ctx.message.author.nick) + "'s lobby", view=view)
+    await ctx.send("Join " + str(ctx.message.author.display_name) + "'s lobby", view=view)
 
 
 @bot.command(name='register', pass_context=True)
@@ -108,20 +121,14 @@ async def register(ctx, arg):
     discord_id = str(ctx.message.author.id)
     steam_id = str(arg)
     response = addrecord(discord_id, steam_id)
-    if ctx.message.author.nick is None:
-        await ctx.send("Thanks " + str(ctx.message.author) + " " + response)
-    else:
-        await ctx.send("Thanks " + str(ctx.message.author.nick) + " " + response)
+    await ctx.send("Thanks " + str(ctx.message.author.display_name) + " " + response)
 
 
 @bot.command(name='unregister', pass_context=True)
 async def unregister(ctx):
     discord_id = str(ctx.message.author.id)
     response = removerecord(discord_id)
-    if ctx.message.author.nick is None:
-        await ctx.send("Thanks " + str(ctx.message.author) + " " + response)
-    else:
-        await ctx.send("Thanks " + str(ctx.message.author.nick) + " " + response)
+    await ctx.send("Thanks " + str(ctx.message.author.display_name) + " " + response)
 
 
 @bot.command(name='checkid', pass_context=True)
@@ -136,10 +143,7 @@ async def changeid(ctx, arg):
     discord_id = str(ctx.message.author.id)
     steam_id = arg
     response = updateid(discord_id, steam_id)
-    if ctx.message.author.nick is None:
-        await ctx.send("Thanks " + str(ctx.message.author) + " " + response)
-    else:
-        await ctx.send("Thanks " + str(ctx.message.author.nick) + " " + response)
+    await ctx.send("Thanks " + str(ctx.message.author.display_name) + " " + response)
 
 
 @bot.command(name='lobbyhelp')
