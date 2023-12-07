@@ -153,7 +153,7 @@ async def lobbyhelp(ctx):
             \
             "Your 17-digit Steam ID can be found in the URL of your Steam Community Profile. If "\
             "you have a custom URL, you can enter the name after 'id' into "\
-            "https://www.steamidfinder.com/ to get your actual Steam ID.\n\n"\
+            "https://www.steamidfinder.com/ to get your actual Steam ID. (steamID64 (Dec))\n\n"\
             \
             "The commands that you can use are:\n\n"\
             \
