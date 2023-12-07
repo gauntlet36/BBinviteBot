@@ -3,21 +3,15 @@ import requests
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
-import psycopg2
+import sqlite3
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
-DBNAME = os.getenv('DB_NAME')
-DB_USER = os.getenv('DB_USER')
-DB_PW = os.getenv('DB_PW')
-DB_HOST = os.getenv('DB_HOST')
-DB_PORT = os.getenv('DB_PORT')
-APIKEY = os.getenv('APIKEY')
+DB_NAME = os.getenv('DB_NAME')
+API_KEY = os.getenv('API_KEY')
 
-
-connection = psycopg2.connect(dbname=DBNAME, user=DB_USER, password=DB_PW, host=DB_HOST, port=DB_PORT)
-connection.autocommit = True
+connection = sqlite3.connect("data/" + DB_NAME)
 bot = commands.Bot(command_prefix='/', intents=discord.Intents(guild_messages=True, message_content=True))
 
 
@@ -28,17 +22,15 @@ async def on_ready():
 
 def createtable():
     cur = connection.cursor()
-    cur.execute(" CREATE TABLE IF NOT EXISTS public.discordinvite ("
-                "discordid VARCHAR(30) PRIMARY KEY,"
-                "steamid VARCHAR(30)); ")
-
+    cur.execute("CREATE TABLE IF NOT EXISTS discordinvite ("
+                "discordid TEXT PRIMARY KEY,"
+                "steamid TEXT); ")
 
 createtable()
 
-
 def steamresponse(steamid):
     url = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/"
-    apikey = APIKEY
+    apikey = API_KEY
     payload = {'key': apikey, 'steamids': steamid}
     response = requests.get(url, params=payload)
     jsonresponse = response.json()
@@ -51,9 +43,9 @@ def steamresponse(steamid):
 
 def addrecord(arg1, arg2):
     cur = connection.cursor()
-    cur.execute(" SELECT * FROM discordinvite WHERE (discordid) = (%s);", (arg1,))
+    cur.execute("SELECT * FROM discordinvite WHERE (discordid) = (?);", (arg1,))
     if cur.fetchone() is None:
-        cur.execute(" INSERT INTO discordinvite (discordid, steamid) VALUES (%s,%s);", (arg1, arg2))
+        cur.execute("INSERT INTO discordinvite (discordid, steamid) VALUES (?,?);", (arg1, arg2))
         cur.close()
         return "Your Steam ID was added"
     else:
@@ -63,14 +55,14 @@ def addrecord(arg1, arg2):
 
 def removerecord(arg):
     cur = connection.cursor()
-    cur.execute(" DELETE FROM discordinvite WHERE (discordid) = (%s);", (arg,))
+    cur.execute("DELETE FROM discordinvite WHERE (discordid) = (?);", (arg,))
     cur.close()
     return "Your Steam ID has been removed"
 
 
 def fetchid(arg):
     cur = connection.cursor()
-    cur.execute(" SELECT (steamid) FROM discordinvite WHERE (discordid) = (%s);", (arg,))
+    cur.execute("SELECT (steamid) FROM discordinvite WHERE (discordid) = (?);", (arg,))
     x = cur.fetchone()[0]
     cur.close()
     return x
@@ -79,7 +71,7 @@ def fetchid(arg):
 def updateid(arg1, arg2):
     cur = connection.cursor()
     print(arg1 + " " + arg2)
-    cur.execute(" UPDATE discordinvite SET steamid = (%s) WHERE discordid = (%s);", (arg2, arg1))
+    cur.execute("UPDATE discordinvite SET steamid = (?) WHERE discordid = (?);", (arg2, arg1))
     cur.close()
     return "Your Steam ID has been updated"
 
