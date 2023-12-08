@@ -174,7 +174,7 @@ async def lobbyhelp(ctx):
             \
             "The commands that you can use are:\n\n"\
             \
-            "**/register *Steam Profile URL*** - This adds your Steam ID to the database\n"\
+            "**/register *SteamProfileURL*** - This adds your Steam ID to the database\n"\
             "**/lobby** - If you've registered your Steam ID and are currently in a joinable "\
                          "lobby, this will post a link"
 
