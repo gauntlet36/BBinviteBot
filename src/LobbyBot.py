@@ -11,7 +11,7 @@ GUILD = os.getenv('DISCORD_GUILD')
 DB_NAME = os.getenv('DB_NAME')
 API_KEY = os.getenv('API_KEY')
 
-connection = sqlite3.connect("data/" + DB_NAME)
+connection = sqlite3.connect(DB_NAME, autocommit=True)
 bot = commands.Bot(command_prefix='/', intents=discord.Intents(guild_messages=True, message_content=True))
 
 
@@ -25,6 +25,7 @@ def createtable():
     cur.execute("CREATE TABLE IF NOT EXISTS discordinvite ("
                 "discordid TEXT PRIMARY KEY,"
                 "steamid TEXT); ")
+    cur.close()
 
 createtable()
 
@@ -39,6 +40,16 @@ def steamresponse(steamid):
     playerlobbyid = jsonresponse.get("response").get("players")[0].get("lobbysteamid")
     invitelink = "steam://joinlobby/" + playergameid + "/" + playerlobbyid + "/" + playersteamid
     return invitelink
+
+
+def steamidresponse(vanityurl):
+    url = "https://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/"
+    apikey = API_KEY
+    payload = {'key': apikey, 'vanityurl': vanityurl}
+    response = requests.get(url, params=payload)
+    jsonresponse = response.json()
+    playersteamid = jsonresponse.get("response").get("steamid")
+    return playersteamid
 
 
 def addrecord(arg1, arg2):
@@ -70,7 +81,6 @@ def fetchid(arg):
 
 def updateid(arg1, arg2):
     cur = connection.cursor()
-    print(arg1 + " " + arg2)
     cur.execute("UPDATE discordinvite SET steamid = (?) WHERE discordid = (?);", (arg2, arg1))
     cur.close()
     return "Your Steam ID has been updated"
@@ -109,11 +119,27 @@ async def lobby(ctx):
 
 @bot.command(name='register', pass_context=True)
 async def register(ctx, arg):
-    await ctx.message.delete()
+    #await ctx.message.delete()
     discord_id = str(ctx.message.author.id)
-    steam_id = str(arg)
-    response = addrecord(discord_id, steam_id)
-    await ctx.send("Thanks " + str(ctx.message.author.display_name) + " " + response)
+    if arg.startswith("https://steamcommunity.com/id/"):
+        argsplit = arg.split("id/")
+        vanityid = argsplit[1].strip("/")
+        steam_id = steamidresponse(vanityid)
+        if steam_id.isnumeric():
+            response = addrecord(discord_id, steam_id)
+            await ctx.send("Thanks " + str(ctx.message.author.display_name) + " " + response)
+        else:
+            await ctx.send("The Steam profile URL you entered may be invalid")
+
+    if arg.startswith("https://steamcommunity.com/profiles/"):
+        argsplit = arg.split("profiles/")
+        steam_id = argsplit[1]
+        steam_id = steam_id[:17]
+        if steam_id.isnumeric():
+            response = addrecord(discord_id, steam_id)
+            await ctx.send("Thanks " + str(ctx.message.author.display_name) + " " + response)
+        else:
+            await ctx.send("The Steam profile URL you entered may be invalid")
 
 
 @bot.command(name='unregister', pass_context=True)
@@ -143,13 +169,12 @@ async def lobbyhelp(ctx):
     helpmessage = "I can help you send invite links automatically. In order to work, you must "\
             "have a public Steam profile and register your Steam ID with me.\n\n"\
             \
-            "Your 17-digit Steam ID can be found in the URL of your Steam Community Profile. If "\
-            "you have a custom URL, you can enter the name after 'id' into "\
-            "https://www.steamidfinder.com/ to get your actual Steam ID. (steamID64 (Dec))\n\n"\
+            "To register your ID, simply use the register command with your full steam "\
+            "profile URL "\
             \
             "The commands that you can use are:\n\n"\
             \
-            "**/register *STEAMID*** - This adds your Steam ID to the database\n"\
+            "**/register *Steam Profile URL*** - This adds your Steam ID to the database\n"\
             "**/lobby** - If you've registered your Steam ID and are currently in a joinable "\
                          "lobby, this will post a link"
 

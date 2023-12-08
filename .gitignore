@@ -153,5 +153,7 @@ cython_debug/
 #.idea/
 
 regusterchatcommands.py
+src/steamdb
+src/steamdb.db
 
 data/
