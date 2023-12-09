@@ -117,7 +117,9 @@ async def on_message(message):
             discord_id = str(ctx.message.author.id)
             steam_id = steamlink.split("/")
             steam_id = steam_id[-1]
-            if tempforceaddrecord(discord_id,steam_id):
+            steam_id = steam_id[:17]
+            if steam_id.isnumeric():
+                if tempforceaddrecord(discord_id,steam_id):
                 response = "Your Steam ID was added. If your steam profile is public In the future you can use the" \
                     " /lobby command to automatically create an invite link"
                 await ctx.send(response)
