@@ -122,7 +122,7 @@ async def on_message(message):
                 if tempforceaddrecord(discord_id,steam_id):
                     response = "Your Steam ID was added. If your steam profile is public In the future you can use the" \
                         " /lobby command to automatically create an invite link"
-                await ctx.send(response)
+                    await ctx.send(response)
     await bot.process_commands(message)
 
 
