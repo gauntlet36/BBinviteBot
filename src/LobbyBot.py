@@ -70,8 +70,7 @@ def tempforceaddrecord(arg1, arg2):
     if cur.fetchone() is None:
         cur.execute("INSERT INTO discordinvite (discordid, steamid) VALUES (?,?);", (arg1, arg2))
         cur.close()
-        return "Your Steam ID was added. If your steam profile is public In the future you can use"\
-            " /lobby to automatically create an invite link"
+        return True
     else:
         cur.close()
         return False
