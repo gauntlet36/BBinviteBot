@@ -64,6 +64,19 @@ def addrecord(arg1, arg2):
         return ", This Steam ID is already registered, please use /changeid command if you would like to change it"
 
 
+def tempforceaddrecord(arg1, arg2):
+    cur = connection.cursor()
+    cur.execute("SELECT * FROM discordinvite WHERE (discordid) = (?);", (arg1,))
+    if cur.fetchone() is None:
+        cur.execute("INSERT INTO discordinvite (discordid, steamid) VALUES (?,?);", (arg1, arg2))
+        cur.close()
+        return "Your Steam ID was added. If your steam profile is public In the future you can use"\
+            " /lobby to automatically create an invite link"
+    else:
+        cur.close()
+        return False
+
+
 def removerecord(arg):
     cur = connection.cursor()
     cur.execute("DELETE FROM discordinvite WHERE (discordid) = (?);", (arg,))
@@ -102,6 +115,14 @@ async def on_message(message):
             view = discord.ui.View()
             view.add_item(button1)
             await ctx.send("Join " + str(ctx.message.author.display_name) + "'s lobby", view=view)
+            discord_id = str(ctx.message.author.id)
+            steam_id = steamlink.split("/")
+            steam_id = steam_id[-1]
+            print(steam_id)
+            if tempforceaddrecord(discord_id,steam_id):
+                response = "Your Steam ID was added. If your steam profile is public In the future you can use" \
+                    " /lobby to automatically create an invite link"
+                await ctx.send(response)
     await bot.process_commands(message)
 
 
@@ -127,7 +148,7 @@ async def register(ctx, arg):
         steam_id = steamidresponse(vanityid)
         if steam_id.isnumeric():
             response = addrecord(discord_id, steam_id)
-            await ctx.send("Thanks " + str(ctx.message.author.display_name) + " " + response)
+            await ctx.send("Thanks " + str(ctx.message.author.display_name) + response)
         else:
             await ctx.send("The Steam profile URL you entered may be invalid")
 
